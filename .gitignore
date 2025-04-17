@@ -1,0 +1,12 @@
+cat << 'EOF' > .gitignore
+# macOS
+.DS_Store
+
+# PyInstaller / build
+build/
+dist/
+*.spec
+
+# PyArmor project files
+pyarmor_project/
+EOF
