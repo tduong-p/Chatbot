@@ -28,7 +28,7 @@ jobs:
           pyinstaller --onefile --name deepseek-bot --add-data "config.py;." main.py
 
       - name: Upload EXE artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: deepseek-windows-exe
           path: dist\deepseek-bot.exe
