@@ -1,9 +1,46 @@
-      - name: Build standalone EXE
+name: Build Windows EXE
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+
+      - name: Install dependencies
         run: |
-          pyinstaller --onefile --name deepseek-bot --add-data=config.py;. `
-            --collect-all openai `
-            --collect-all discord `
-            --collect-all sentence_transformers `
-            --collect-all torch `
-            --collect-all rich `
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller pyinstaller-hooks-contrib
+
+      - name: Build standalone EXE
+        shell: bash
+        run: |
+          pyinstaller \
+            --onefile \
+            --name deepseek-bot \
+            --add-data=config.py;. \
+            --collect-all=openai \
+            --collect-all=discord \
+            --collect-all=sentence_transformers \
+            --collect-all=torch \
+            --collect-all=rich \
             main.py
+
+      - name: Upload EXE + config
+        uses: actions/upload-artifact@v4
+        with:
+          name: deepseek-windows-release
+          path: |
+            dist\deepseek-bot.exe
+            dist\config.py
