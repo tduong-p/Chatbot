@@ -21,15 +21,16 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          # install alpha discord.py-self first
+          pip install git+https://github.com/dolfies/discord.py-self@master#egg=discord.py-self[voice,speed]
+          # then the rest
           pip install -r requirements.txt pyinstaller pyinstaller-hooks-contrib
 
       - name: Build standalone EXE
         shell: bash
         run: |
-          pyinstaller \
-            --onefile \
-            --name deepseek-bot \
-            --add-data=config.py;. \
+          pyinstaller --onefile --name deepseek-bot \
+            --add-data=config.py:. \
             --collect-all=openai \
             --collect-all=discord \
             --collect-all=sentence_transformers \
@@ -42,5 +43,5 @@ jobs:
         with:
           name: deepseek-windows-release
           path: |
-            dist\deepseek-bot.exe
-            dist\config.py
+            dist/deepseek-bot.exe
+            dist/config.py
